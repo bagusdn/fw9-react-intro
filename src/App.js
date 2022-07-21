@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+
+import React from "react";
+import {Container, Row,Col} from 'react-bootstrap'
+import http from './helper/helper'
 
 function App() {
+
+  const [character,setChara] = React.useState({})
+
+  const getChara = async () =>{
+    const {data} = await http().get('./character')
+    setChara(data)
+  }
+
+  React.useEffect(()=>{
+    getChara()
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Row className="g-2">
+        {character.results.map((characters)=>{
+          return(
+            <Col>
+              <img className='img-fluid' src={characters.image} alt={characters.name} />
+            </Col>
+          )
+        })}
+      </Row>
+    </Container>
   );
 }
+
+
+
 
 export default App;
